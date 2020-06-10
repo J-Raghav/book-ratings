@@ -1,7 +1,7 @@
 import os
 from functools import wraps
 
-from flask import Flask, session, request, render_template, url_for, redirect, g, make_response,flash
+from flask import Flask, session, request, render_template, url_for, redirect, g, make_response,flash,Markup
 from flask_session import Session
 
 from sqlalchemy import create_engine
@@ -69,6 +69,13 @@ def index(page=1):
         'high':page*12
         }
     ).fetchall()
+    if not books and page != 1:
+        error = {
+            'code':404,
+            'title':'Not found',
+            'msg':'Invalid page the page you are trying to access does not exist'
+        }
+        return make_response(render_template('error.html',error=error),404)
     return render_template('index.html', title='Home', page=page, books=books)
 
 app.add_url_rule('/page/<int:page>','index',index)
@@ -145,7 +152,10 @@ def register():
                 )
                 db.commit()
                 return redirect(url_for('login'))
-    return render_template('register.html', title='Register', msg=msg)
+
+    hrefs = Markup(f"""<small>Already a user?, <a href={url_for('login')}>Log in</a> here</small>""")
+
+    return render_template('forms.html', title='Register', msg=msg, hrefs=hrefs)
 
 @app.route("/login",methods=['GET','POST'])
 def login():
@@ -172,7 +182,9 @@ def login():
             else:
                 msg = {'class':'danger','body': f'"{username}" Incorrect username, If not registerd, please register before trying to login'}
 
-    return render_template('login.html', title='Login', msg = msg)
+    hrefs = Markup(f"""<small>Don't have account, <a href={ url_for('register') }>Register</a> here</small>""")
+
+    return render_template('forms.html', title='Login', msg=msg, hrefs=hrefs)
 
 @app.route('/logout')
 def logout():
