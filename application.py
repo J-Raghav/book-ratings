@@ -1,7 +1,7 @@
 import os
 from functools import wraps
 
-from flask import Flask, session, request, render_template, url_for, redirect, g, make_response,flash,Markup
+from flask import Flask, session, request, render_template, url_for, redirect, g, make_response,flash,Markup,jsonify
 from flask_session import Session
 
 from sqlalchemy import create_engine
@@ -230,7 +230,7 @@ def post_review(isbn):
             'title':'Invalid data',
             'msg': "Please submit valid data"
         }
-        return render_template('error.html',error=error)
+        return make_response(render_template('error.html',error=error),422)
     review = db.execute(
         'SELECT * FROM '
         'reviews '
@@ -246,7 +246,7 @@ def post_review(isbn):
             'title':'Not Allowed',
             'msg': 'You are not allowed to review same book twice'
         }
-        return render_template('error.html',error=error)
+        return make_response(render_template('error.html',error=error),403)
 
     if rating and text_review:
         db.execute(
@@ -262,3 +262,27 @@ def post_review(isbn):
         )
         db.commit()
     return redirect(url_for('book',isbn=isbn))
+
+@app.route('/api/<string:isbn>')
+def book_info(isbn):
+    book = db.execute(
+        'SELECT * '
+        'FROM books '
+        'WHERE isbn = :isbn ',
+        {
+        'isbn' : isbn
+        }
+    ).fetchone()
+    if book is None:
+        return make_response(jsonify(status_code=404,message="Data doesn'd exist"),404)
+
+    res  = jsonify(
+        title = book.title,
+        author = book.author,
+        year = book.year,
+        isbn = book.isbn,
+        review_count = book.reviews_count,
+        average_score = book.average_rating
+    )
+
+    return make_response(res,200)
