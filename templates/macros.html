@@ -1,9 +1,9 @@
-{% macro card(book) %}
+{% macro card(book,flag=True) %}
   <div class="card border border-dark my-2 my-md-4 ">
     <div class="card-header text-center bg-dark">
-      <a href="#"> <h2 class="mb-0">{{ book.title }}</h2> </a>
+      <a {% if flag %} href="{{ url_for('book',isbn=book.isbn) }}"{% else %} class='text-white'{% endif %}> <h2 class="mb-0">{{ book.title }}</h2> </a>
     </div>
-    <div class="card-body">
+    <div class="card-body {% if not flag %} text-white bg-dark {% endif %}">
       <p class='mb-0'><b>Isbn</b> - {{ book.isbn }}</p>
       <p class='mb-0'><b>Published In</b> - {{ book.year }}</p>
       <p class='mb-0'> <b>Goodreads ratings</b> - {{ book.average_rating }} <small>{{ book.reviews_count }} reviews</small></p>
@@ -25,11 +25,11 @@
     <form  action="{{ url_for( title.lower() ) }}" method="post">
       <div class="form-group">
         <label for="username">Username</label>
-        <input class='form-control' type="text" name="username" value="">
+        <input id='username' class='form-control' type="text" name="username" value="" required>
       </div>
       <div class="form-group">
         <label for="password">Password</label>
-        <input class='form-control' type="password" name="password" value="">
+        <input id='password' class='form-control' type="password" name="password" value="" required>
       </div>
 
       <button class="btn btn-primary" type="submit" name=""> {{ title }}</button>

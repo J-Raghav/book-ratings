@@ -11,7 +11,9 @@ h1{
 h2{
   font-size: 1.5rem;
 }
-
+h3{
+  font-size: 1rem;
+}
 article .card{
   padding:1px;
 }
@@ -28,17 +30,16 @@ nav a:hover{
   height:90%;
   overflow: none;
 }
-.card-header a{
+article .card-header a{
   display: table-cell;
   vertical-align: middle;
   height:3rem;
 }
 
-
-.card-header:hover{
+article .card-header:hover{
   outline: #17a2b8 solid 2px;
 }
-.card-header:hover a{
+article .card-header:hover a{
   color: #17a2b8;
   text-decoration: none;
 }

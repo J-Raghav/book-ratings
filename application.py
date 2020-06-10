@@ -31,7 +31,7 @@ def login_required(view):
     @wraps(view)
     def wrapped_view(**kwargs):
         if g.user is None:
-            flash("Please login to use 'Search' function")
+            flash(f"Please login to use '{view.__name__.replace('_',' ')}' function")
             return redirect(url_for('login'))
         return view(**kwargs)
 
@@ -48,7 +48,13 @@ def load_loggedin_user():
         ).fetchone()
         print(g.user.username)
 
-
+def error404():
+        error = {
+            'code':404,
+            'title':'Not found',
+            'msg':'Invalid page the page you are trying to access does not exist'
+        }
+        return make_response(render_template('error.html',error=error),404)
 # Route leading to home page
 @app.route("/")
 def index(page=1):
@@ -70,12 +76,7 @@ def index(page=1):
         }
     ).fetchall()
     if not books and page != 1:
-        error = {
-            'code':404,
-            'title':'Not found',
-            'msg':'Invalid page the page you are trying to access does not exist'
-        }
-        return make_response(render_template('error.html',error=error),404)
+        error404()
     return render_template('index.html', title='Home', page=page, books=books)
 
 app.add_url_rule('/page/<int:page>','index',index)
@@ -114,12 +115,7 @@ def search(page=1):
         }
     ).fetchall()
     if not books and page != 1:
-        error = {
-            'code':404,
-            'title':'Not found',
-            'msg':'Invalid page the page you are trying to access does not exist'
-        }
-        return make_response(render_template('error.html',error=error),404)
+        error404()
 
     return render_template('search.html',title='Search', page=page, item=item, books=books)
 
@@ -191,3 +187,78 @@ def logout():
     session.pop('user_id',None)
     flash('You were successfully logged out')
     return redirect(url_for('index'))
+
+
+@app.route('/book/<string:isbn>')
+def book(isbn):
+
+    book = db.execute(
+        'SELECT * FROM books '
+        'WHERE isbn=:isbn',
+        {
+        'isbn':isbn
+        }
+    ).fetchone()
+
+    if book is None:
+        error404()
+
+    reviews = db.execute(
+        'SELECT * FROM reviews '
+        'WHERE book_id = :id ',
+        {
+        'id':book.id
+        }
+    )
+    return render_template('book.html', title=book.title , book=book, reviews=reviews)
+
+@app.route('/post/<string:isbn>',methods=["POST"])
+@login_required
+def post_review(isbn):
+    rating = request.form.get('rating').strip()
+    text_review = request.form.get('text_review').strip()
+    book = db.execute(
+        'SELECT * FROM '
+        'books '
+        'WHERE isbn = :isbn ',
+        { 'isbn': isbn }
+    ).fetchone()
+    
+    if not book:
+        error = {
+            'code':422,
+            'title':'Invalid data',
+            'msg': "Book doesn't exist"
+        }
+        return render_template('error.html',error=error)
+    review = db.execute(
+        'SELECT * FROM '
+        'reviews '
+        'WHERE username = :username and book_id = :book_id',
+        {
+            'username':g.user.username,
+            'book_id':book.id
+        }
+    ).fetchone()
+    if review is not None:
+        error = {
+            'code':403,
+            'title':'Not Allowed',
+            'msg': 'You are not allowed to review same book twice'
+        }
+        return render_template('error.html',error=error)
+
+    if rating and text_review:
+        db.execute(
+            'INSERT INTO reviews '
+            '( username, book_id, rating, text_review) '
+            'VALUES ( :username, :book_id, :rating, :text_review) ',
+            {
+                'username': g.user.username,
+                'book_id' : book.id,
+                'rating'  : rating,
+                'text_review' : text_review
+            }
+        )
+        db.commit()
+    return redirect(url_for('book',isbn=isbn))

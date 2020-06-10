@@ -19,11 +19,11 @@ CREATE TABLE books (
 );
 CREATE TABLE reviews (
   id SERIAL PRIMARY KEY,
-  user_id INTEGER NOT NULL,
+  username VARCHAR UNIQUE NOT NULL,
   book_id INTEGER NOT NULL,
   rating FLOAT NOT NULL,
   text_review VARCHAR,
 
-  FOREIGN KEY (user_id) REFERENCES users (id),
+  FOREIGN KEY (username) REFERENCES users (username),
   FOREIGN KEY (book_id) REFERENCES books (id)
 )
