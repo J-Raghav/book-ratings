@@ -1,65 +1,81 @@
 # Book Ratings
 
-##  **import.py**
+##  **File: import.py**
 
 ### functions
 
-- _create\_tables_
+- **create\_tables**
 
     - Input  : SCHEMA.sql ( for basic table structure )
     - Output : Generate table present in SCHEMA.sql
 
-- _get\_books\_data_ ( generator function)
+- **get\_books\_data** ( generator function)
 
     - Input  : books.csv ( for list of isbn required for API request)
     - Output : yields  information about books fetched from GOODREADS API  
 
-- _insert\_books_
+- **insert\_books**
 
     - Input  : Uses book data yielded by **get\_books\_data**
     - Output : Inserts book data in Database at heroku
 
-## **application.py**
+## **File: application.py**
 
-### view\_functions
+### View\_Functions
 
-- _index(page=1)_      - Attached with ( _'/'_ ) and ( _'/page/<int:page>'_ ) routes yields HOME( _index.html_ ) page.
-- _search(page=1)_     - Attached with ( _'/search'_ ) and (_'/search/page/<int:page>'_) route yields SEARCH( _search.html_ ) page.
-- _register_           - Attached with ( _'/register'_ ) route yields register( _form.html_ ) page.
-- _login_              - Attached with ( _'/login'_ ) route yields login( _forms.html_ ) page.
-- _logout_             - Attached with ( _'/logout'_ ) route redirects to _index_ view function.
-- _book(isbn)_         - Attached with ( _'/book/<string:isbn>'_) route yields book( _book.html_ ) page.
-- _post\_reviews_      - Attached with ( _'/post'_ ) route redirects to _index_ view function.
-- _book\_info(isbn)_   - Attached with ( _'/api/<string:isbn>'_) route and returns **JSON response**.
+- **index(page=1)**    :
+  - Path = [ _'/'_ ,  _'/page/<int:page>'_ ]  
+  - Returns  _index.html_  page.
+- **search(page=1)**   :
+  - Path = [ _'/search'_ , _'/search/page/<int:page>'_ ]
+  - Returns _search.html_ page or Redirects to _login_ view function.
+- **register**         :
+  - Path = _'/register'_
+  - Returns _forms.html_ page or Redirects to _login_ view function.
+- **login**            :
+  - Path = _'/login'_  
+  - Returns _forms.html_ page.
+- **logout**           :
+  - Path =  _'/logout'_  
+  - Redirects to  _index_ view function.
+- **book(isbn)**       :
+  - Path =  _'/book/<string:isbn>'_  
+  - Returns _book.html_ page.
+- **post\_reviews**    :
+  - Path =  _'/post'_  
+  - Redirects _book_ view function.
+- **book\_info(isbn)** :
+  - Path = _'/api/<string:isbn>'_  
+  - Returns **JSON response**.
 
-### functions
+### Other Functions
 
-- _load\_loggedin\_user_ - loads logged in user if any. ( called before every request )
-- _login\_required_      - protects routes which require authorization. ( called before any protected view )
-  Protected Views - [ 'search', 'post_review']
+- **load\_loggedin\_user** - loads logged in user if any. ( called before every request )
+- **login\_required**      - protects routes which require authorization. ( called before any protected view )
+  Protected Views - [ 'search', 'post_review' ]
 
-## **Templates**
+## **Dir: Templates**
 
-- _macros.html_        - Contains macros used as module only.
+- **macros.html**        - Contains macros used as module only.
   - _card(book, flag=True)_ : Used in **book.html**
   - _form(title, hrefs, msg)_ : Used in **forms.html**
   - _paginateBooks(endpoint, books, page, item=None)_ : Used in **search.html** and **index.html**
 
-- _layout.html_        - Contains basic layout used as base for all pages.   
-- _index.html_         - Home page
-- _forms.html_         - Register and Login pages  
-- _search.html_        - Search result page
-- _book.html_          - Book page
-- _error.html_         - Error page
+- **layout.html**        - Contains basic layout used as base for all pages.   
+- **index.html**         - Home page
+- **forms.html**         - Register and Login pages  
+- **search.html**        - Search result page
+- **book.html**          - Book page
+- **error.html**         - Error page
 
-## **static**
+## **Dir: Static**
 
-- _master.css_         - Contains styles for all pages.
+- **master.css**         - Contains styles for all pages.
 
 
 ## **Other Files**
 
-- _books.csv_         : Contains basic information about 5000 books used to get data about books in **import.py**.
-- _requirements.txt_  : Contains requirements of project meant o be installed by **pip install -r requirements.txt**.
-- _runtime.txt_       : Contains python runtime required for deployment to heroku.
-- _Procfile_          : Contains init info for deployment to heroku.
+- **books.csv**          : Contains basic information about 5000 books used to get data about books in **import.py**.
+- **requirements.txt**  : Contains requirements of project meant o be installed by **pip install -r requirements.txt**.
+- **runtime.txt**       : Contains python runtime required for deployment to heroku.
+- **Procfile**          : Contains init info for deployment to heroku.
