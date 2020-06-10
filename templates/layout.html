@@ -23,7 +23,7 @@
           {% if g.user %}
             <div class="p-2 text-center text-white bg-dark">
               <b class='text-info'><span id='username'>{{ g.user.username }}</span></b>
-              <a class="text-danger ml-2" href="{{ url_for('logout') }}">logout</a>
+              <a class="ml-2" href="{{ url_for('logout') }}">logout</a>
             </div>
           {% else %}
             <div class="text-center">

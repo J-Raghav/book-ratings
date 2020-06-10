@@ -1,6 +1,7 @@
 import os
+from functools import wraps
 
-from flask import Flask, session, request, render_template, url_for, redirect, g, make_response
+from flask import Flask, session, request, render_template, url_for, redirect, g, make_response,flash
 from flask_session import Session
 
 from sqlalchemy import create_engine
@@ -27,9 +28,10 @@ engine = create_engine(os.getenv("DATABASE_URL"))
 db = scoped_session(sessionmaker(bind=engine))
 
 def login_required(view):
-    @functools.wraps(view)
+    @wraps(view)
     def wrapped_view(**kwargs):
         if g.user is None:
+            flash("Please login to use 'Search' function")
             return redirect(url_for('login'))
         return view(**kwargs)
 
@@ -72,6 +74,7 @@ def index(page=1):
 app.add_url_rule('/page/<int:page>','index',index)
 
 @app.route("/search")
+@login_required
 def search(page=1):
     g.len = len
     item = request.args.get('item',None).strip()
@@ -131,7 +134,7 @@ def register():
             ).fetchone()
 
             if user is not None:
-                msg = {'class':'danger','body':f'Username "{username}" already exist,please choose diffrent username or click on login page.'}
+                msg = {'class':'danger','body':f'Username "{username}" already exist, please choose diffrent username or click on login page.'}
             if msg is None:
                 db.execute(
                     'INSERT INTO users (username, password) values (:username, :password)',
@@ -164,6 +167,7 @@ def login():
                     msg = {'class':'danger','body': 'Password Incorrect'}
                 if msg is None:
                     session['user_id'] = user.id
+                    flash('You were successfully logged in')
                     return redirect(url_for('index'))
             else:
                 msg = {'class':'danger','body': f'"{username}" Incorrect username, If not registerd, please register before trying to login'}
@@ -173,4 +177,5 @@ def login():
 @app.route('/logout')
 def logout():
     session.pop('user_id',None)
+    flash('You were successfully logged out')
     return redirect(url_for('index'))

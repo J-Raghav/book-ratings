@@ -2,7 +2,18 @@
 {% from 'macros.html' import paginateBooks %}
 
 {% block content%}
+
   <div class="container">
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        {% for message in messages %}
+          <div class="alert alert-success m-3">
+            {{ message }}
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
     <h1 class='text-dark my-3 my-md-4'>Top rated books</h1>
     {{ paginateBooks('index',books,page) }}
   </div>

@@ -3,10 +3,19 @@
 
 {% block content %}
   <div class="container">
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        {% for message in messages %}
+          <div class="alert alert-success m-3">
+            {{ message }}
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
     <div class="form-cont">
       <h1 class="my-3 my-md-4">Login</h1>
       {% if msg %}
-        <div class="alert alert-{{ msg.class }} mx-2">
+        <div class="alert alert-{{ msg.class }}">
           {{ msg.body }}
         </div>
       {% endif %}
