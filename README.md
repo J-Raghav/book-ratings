@@ -29,19 +29,19 @@
 - **search(page=1)**   :
   - Path = [ _'/search'_ , _'/search/page/<int:page>'_ ]
   - Returns _search.html_ page or Redirects to _login_ view function.
-- **register**         :
+- **register()**         :
   - Path = _'/register'_
   - Returns _forms.html_ page or Redirects to _login_ view function.
-- **login**            :
+- **login()**            :
   - Path = _'/login'_  
   - Returns _forms.html_ page.
-- **logout**           :
+- **logout()**           :
   - Path =  _'/logout'_  
   - Redirects to  _index_ view function.
 - **book(isbn)**       :
   - Path =  _'/book/<string:isbn>'_  
   - Returns _book.html_ page.
-- **post\_reviews**    :
+- **post\_reviews()**    :
   - Path =  _'/post'_  
   - Redirects _book_ view function.
 - **book\_info(isbn)** :
@@ -50,8 +50,8 @@
 
 ### Other Functions
 
-- **load\_loggedin\_user** - loads logged in user if any. ( called before every request )
-- **login\_required**      - protects routes which require authorization. ( called before any protected view )
+- **load\_loggedin\_user()** - loads logged in user if any. ( called before every request )
+- **login\_required(view)**      - protects routes which require authorization. ( called before any protected view )
   Protected Views - [ 'search', 'post_review' ]
 
 ## **Dir: Templates**
