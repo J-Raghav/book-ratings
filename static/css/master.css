@@ -14,6 +14,10 @@ h2{
 h3{
   font-size: 1rem;
 }
+footer{
+  position: absolute;
+  bottom: 0;
+}
 article .card{
   padding:1px;
 }
@@ -42,9 +46,6 @@ nav a:hover{
 .card{
   height:90%;
   overflow: none;
-}
-.main-cont{
-  min-height: 60vh;
 }
 
 @media only screen and (min-width: 567px) {
