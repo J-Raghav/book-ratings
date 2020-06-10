@@ -210,6 +210,8 @@ def book(isbn):
         }
     ).fetchall()
 
+    reviews = { i:i.username for i in reviews} 
+
     return render_template('book.html', title=book.title , book=book, reviews=reviews)
 
 @app.route('/post/<string:isbn>',methods=["POST"])

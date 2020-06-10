@@ -39,7 +39,7 @@
 
     <p><a href='review-cont' data-toggle='collapse' data-target='#review-cont' data-parent='#parent'>Reviews</a> ({{g.len(reviews)}} reviews)</p>
     <div id="review-cont" class='collapse'>
-      {% for review in reviews %}
+      {% for review in reviews.values() %}
         <div class="card review">
           <div class="card-header">
             <b>{{ review.username }}</b>
