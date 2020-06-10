@@ -1,9 +1,9 @@
 {% macro card(book,flag=True) %}
   <div class="card border border-dark my-2 my-md-4 ">
     <div class="card-header text-center bg-dark">
-      <a {% if flag %} href="{{ url_for('book',isbn=book.isbn) }}"{% else %} class='text-white'{% endif %}> <h2 class="mb-0">{{ book.title }}</h2> </a>
+      <a {% if flag %} href="{{ url_for('book',isbn=book.isbn) }}"{% else %} class='text-light'{% endif %}> <h2 class="mb-0">{{ book.title }}</h2> </a>
     </div>
-    <div class="card-body {% if not flag %} text-white bg-dark {% endif %}">
+    <div class="card-body {% if not flag %} text-light bg-dark {% endif %}">
       <p class='mb-0'><b>Isbn</b> - {{ book.isbn }}</p>
       <p class='mb-0'><b>Published In</b> - {{ book.year }}</p>
       <p class='mb-0'> <b>Goodreads ratings</b> - {{ book.average_rating }} <small>{{ book.reviews_count }} reviews</small></p>
@@ -15,7 +15,7 @@
 {% endmacro %}
 
 {% macro form(title,hrefs,msg) %}
-  <div class="form-cont">
+  <div class="form-cont my-4">
     <h1 class='my-3 my-md-4'>{{ title }}</h1>
     {% if msg %}
       <div class="alert alert-{{ msg.class}}">

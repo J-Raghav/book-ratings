@@ -21,7 +21,7 @@
         </form>
         <div class="ml-auto mt-4 mt-md-0 " >
           {% if g.user %}
-            <div class="p-2 text-center text-white bg-dark">
+            <div class="p-2 text-center text-light bg-dark">
               <b class='text-info'><span id='username'>{{ g.user.username }}</span></b>
               <a class="ml-2" href="{{ url_for('logout') }}">logout</a>
             </div>
@@ -40,7 +40,7 @@
     {% endblock %}
 
 
-    <footer class="container-fluid bg-dark text-light page-footer font-small mt-3 p-2">
+    <footer class="container-fluid bg-dark text-light page-footer font-small mt-5 p-2">
       <div class="text-center my-2">
         Contact Me : <a href="mailto:raghavjoshi789@gmail.com">raghavjoshi789h@gmail.com</a>
       </div>

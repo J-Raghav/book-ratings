@@ -46,7 +46,6 @@ def load_loggedin_user():
             'SELECT * FROM users WHERE id = :id',
             {'id':user_id}
         ).fetchone()
-        print(g.user.username)
 
 def error404():
         error = {
