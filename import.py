@@ -59,6 +59,8 @@ def insert_books():
         if cnt%100==0:
             db.commit()
     db.commit()
+
+# DEBUGing purpose only    
 def commands():
     print(db.execute(
         'SELECT * '

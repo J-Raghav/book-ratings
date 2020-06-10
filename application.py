@@ -191,7 +191,7 @@ def logout():
 
 @app.route('/book/<string:isbn>')
 def book(isbn):
-
+    g.len = len
     book = db.execute(
         'SELECT * FROM books '
         'WHERE isbn=:isbn',
@@ -209,7 +209,8 @@ def book(isbn):
         {
         'id':book.id
         }
-    )
+    ).fetchall()
+    
     return render_template('book.html', title=book.title , book=book, reviews=reviews)
 
 @app.route('/post/<string:isbn>',methods=["POST"])
@@ -223,12 +224,12 @@ def post_review(isbn):
         'WHERE isbn = :isbn ',
         { 'isbn': isbn }
     ).fetchone()
-    
-    if not book:
+
+    if not book or int(rating) not in range(1,6):
         error = {
             'code':422,
             'title':'Invalid data',
-            'msg': "Book doesn't exist"
+            'msg': "Please submit valid data"
         }
         return render_template('error.html',error=error)
     review = db.execute(
