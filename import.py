@@ -60,23 +60,9 @@ def insert_books():
             db.commit()
     db.commit()
 
-# DEBUGing purpose only    
-def commands():
-    print(db.execute(
-        'SELECT * '
-        'FROM reviews '
-    ).fetchall())
-commands()
-command=0
-cmd = 0
+
+command = 0
 if command :
     create_tables()
-
-if cmd :
     insert_books()
-        # 'SELECT '
-	    #    'COLUMN_NAME '
-        #    'FROM '
-	    #       'information_schema.COLUMNS '
-        #       'WHERE '
-	# " TABLE_NAME = 'reviews'"
+    
