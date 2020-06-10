@@ -1,0 +1,19 @@
+{% extends 'layout.html' %}
+{% from 'macros.html' import paginateBooks %}
+
+{%  block content %}
+  <div class="container-sm">
+    <div id="results">
+      {% if books %}
+        <div class="alert alert-success my-3 my-md-4">
+          Page {{ page }} - Search result for query "{{ item }}"
+        </div>
+        {{ paginateBooks('search',books,page,item) }}
+      {% else %}
+        <div class="alert alert-danger my-3 my-md-4">
+          Books matching Query "{{ item }}" not found
+        </div>
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}

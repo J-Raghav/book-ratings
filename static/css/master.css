@@ -1,0 +1,51 @@
+html{
+  font-size: calc(14px + ( 24 - 14) * ((100vw - 300px) / (3300 - 300)));
+}
+p{
+  font-size: 1rem;
+}
+h1{
+  text-align: center;
+  font-size: 2.5rem;
+}
+h2{
+  font-size: 1.5rem;
+}
+
+article .card{
+  padding:1px;
+}
+nav a,.card a{
+  color: white;
+}
+
+nav a:hover{
+  text-decoration: none;
+  color:#17a2b8;
+}
+
+.card{
+  height:90%;
+  overflow: none;
+}
+.card-header a{
+  display: table-cell;
+  vertical-align: middle;
+  height:3rem;
+}
+
+
+.card-header:hover{
+  outline: #17a2b8 solid 2px;
+}
+.card-header:hover a{
+  color: #17a2b8;
+  text-decoration: none;
+}
+
+@media only screen and (min-width: 567px) {
+  .form-cont{
+    margin: auto;
+    width:40%;
+  }
+}

@@ -1,0 +1,9 @@
+{% extends 'layout.html' %}
+{% from 'macros.html' import paginateBooks %}
+
+{% block content%}
+  <div class="container">
+    <h1 class='text-dark my-3 my-md-4'>Top rated books</h1>
+    {{ paginateBooks('index',books,page) }}
+  </div>
+{% endblock%}
