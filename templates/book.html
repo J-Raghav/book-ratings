@@ -1,0 +1,63 @@
+{% extends 'layout.html' %}
+{% from 'macros.html' import card %}
+
+{% block content %}
+  <div class="container" id='parent'>
+    {{ card(book,False) }}
+    {% set editflag = not not reviews.get(g.user.username) %}
+    <p>
+      <a href='review-form' data-toggle='collapse' data-target='#review-form' data-parent='#parent'>
+        {% if editflag %}
+          View review
+        {% else %}
+          Give review
+        {% endif %}
+      </a>
+    </p>
+    <form id='review-form' class='collapse bg-dark text-light p-3 rounded' action="{{ url_for('post_review',isbn=book.isbn) }}" method="post">
+      <div class="form-group">
+        <label for="rating">Rating</label>
+        <input type="number" id="rating" name="rating" min="1" max="5"  {% if editflag %} value={{ reviews[g.user.username].rating }} {% endif %} required>
+        <span>  / 5</span>
+      </div>
+      <div class="form-group">
+        <label for="review">Review</label>
+        <textarea id='review' class="form-control" name='text_review' rows="3" maxlength=500 required>
+          {% if editflag %}
+            {{ reviews.get(g.user.username).text_review }}
+          {% endif %}
+        </textarea>
+      </div>
+
+        {% if editflag %}
+
+        {% else %}
+          <button class='btn btn-primary' type="submit" name="review">Submit</button>
+        {% endif %}
+
+    </form>
+
+    <p><a href='review-cont' data-toggle='collapse' data-target='#review-cont' data-parent='#parent'>Reviews</a> ({{g.len(reviews)}} reviews)</p>
+    <div id="review-cont" class='collapse'>
+      {% for review in reviews %}
+        <div class="card review">
+          <div class="card-header">
+            <b>{{ review.username }}</b>
+            {% if review.username == g.user.username %}
+              <a class='text-danger' href="#">delete</a>
+            {% endif %}
+          </div>
+          <div class="card-body">
+            <p class="card-text">Rating:- {{ review.rating }} / 5</p>
+            <p class="card-text">{{ review.text_review }}</p>
+          </div>
+        </div>
+
+
+
+      {% endfor %}
+    </div>
+  </div>
+
+
+{% endblock %}

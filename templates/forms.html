@@ -1,0 +1,19 @@
+{% extends 'layout.html' %}
+{% from 'macros.html' import form %}
+
+{% block content %}
+  <div class="container">
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        {% for message in messages %}
+          <div class="alert alert-success m-3">
+            {{ message }}
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    {{ form(title,hrefs,msg)}}
+
+  </div>
+{% endblock %}
