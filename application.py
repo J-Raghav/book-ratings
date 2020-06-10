@@ -15,7 +15,7 @@ app = Flask(__name__)
 if not os.getenv("DATABASE_URL"):
     raise RuntimeError("DATABASE_URL is not set")
 
-app.config["SECRET_KEY"] = 'secret'
+app.config["SECRET_KEY"] = os.getenv('SECRET_KEY')
 # Configure session to use filesystem
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
@@ -210,7 +210,7 @@ def book(isbn):
         'id':book.id
         }
     ).fetchall()
-    
+
     return render_template('book.html', title=book.title , book=book, reviews=reviews)
 
 @app.route('/post/<string:isbn>',methods=["POST"])
