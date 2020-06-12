@@ -282,7 +282,7 @@ def book_info(isbn):
         }
     ).fetchone()
     if book is None:
-        return make_response(jsonify(status_code=404,message="Data doesn'd exist"),404)
+        return make_response(jsonify(message="Book doesn'd exist"),404)
 
     res  = jsonify(
         title = book.title,
