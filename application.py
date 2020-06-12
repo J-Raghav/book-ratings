@@ -58,6 +58,8 @@ def error404():
 @app.route("/")
 def index(page=1):
     g.len = len
+    g.addMarkup = lambda x: x
+
     books = db.execute(
         'SELECT '
             ' * '
@@ -94,6 +96,7 @@ def search(page=1):
         }
         return make_response(render_template('error.html',error=error),400)
 
+    g.addMarkup = lambda x: Markup(x.replace(item,f"<mark>{item}</mark>"))
     books = db.execute(
         'SELECT '
             '* '
@@ -191,6 +194,7 @@ def logout():
 @app.route('/book/<string:isbn>')
 def book(isbn):
     g.len = len
+    g.addMarkup = lambda x:x
     book = db.execute(
         'SELECT * FROM books '
         'WHERE isbn=:isbn',
@@ -210,7 +214,7 @@ def book(isbn):
         }
     ).fetchall()
 
-    reviews = { i:i.username for i in reviews} 
+    reviews = { i:i.username for i in reviews}
 
     return render_template('book.html', title=book.title , book=book, reviews=reviews)
 

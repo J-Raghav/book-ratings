@@ -1,15 +1,19 @@
 {% macro card(book,flag=True) %}
   <div class="card border border-dark my-2 my-md-4 ">
     <div class="card-header text-center bg-dark">
-      <a {% if flag %} href="{{ url_for('book',isbn=book.isbn) }}"{% else %} class='text-light'{% endif %}> <h2 class="mb-0">{{ book.title }}</h2> </a>
+      <a {% if flag %} href="{{ url_for('book',isbn=book.isbn) }}"{% else %} class='text-light'{% endif %}>
+        <h2 class="mb-0">
+          {{ g.addMarkup(book.title) }}
+        </h2>
+     </a>
     </div>
     <div class="card-body {% if not flag %} text-light bg-dark {% endif %}">
-      <p class='mb-0'><b>Isbn</b> - {{ book.isbn }}</p>
+      <p class='mb-0'><b>Isbn</b> - {{ g.addMarkup(book.isbn) }}</p>
       <p class='mb-0'><b>Published In</b> - {{ book.year }}</p>
       <p class='mb-0'> <b>Goodreads ratings</b> - {{ book.average_rating }} <small>{{ book.reviews_count }} reviews</small></p>
     </div>
     <div class="card-footer bg-dark">
-      <p class='card-text text-light text-right'><b>- {{ book.author }}</b></p>
+      <p class='card-text text-light text-right'><b>- {{ g.addMarkup(book.author) }}</b></p>
     </div>
   </div>
 {% endmacro %}
