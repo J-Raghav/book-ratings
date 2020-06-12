@@ -9,7 +9,7 @@ CREATE TABLE users (
 );
 CREATE TABLE books (
   id SERIAL PRIMARY KEY,
-  isbn VARCHAR NOT NULL,
+  isbn VARCHAR UNIQUE NOT NULL,
   title VARCHAR NOT NULL,
   author VARCHAR NOT NULL,
   year INTEGER NOT NULL,
@@ -19,7 +19,7 @@ CREATE TABLE books (
 );
 CREATE TABLE reviews (
   id SERIAL PRIMARY KEY,
-  username VARCHAR UNIQUE NOT NULL,
+  username VARCHAR NOT NULL,
   book_id INTEGER NOT NULL,
   rating FLOAT NOT NULL,
   text_review VARCHAR,

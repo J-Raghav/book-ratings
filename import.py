@@ -60,9 +60,15 @@ def insert_books():
             db.commit()
     db.commit()
 
+def CommandDC():
+    db.execute( """ SELECT * FROM reviews """)
+CommandDC()
 
 command = 0
 if command :
     create_tables()
     insert_books()
-    
+
+
+db.close()
+engine.dispose()

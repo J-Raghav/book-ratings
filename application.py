@@ -5,7 +5,8 @@ from flask import Flask, session, request, render_template, url_for, redirect, g
 from flask_session import Session
 
 from sqlalchemy import create_engine
-from sqlalchemy.orm import scoped_session, sessionmaker
+from sqlalchemy.orm import sessionmaker
+from flask_sqlalchemy_session import flask_scoped_session
 
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -25,7 +26,8 @@ Session(app)
 # Set up database
 
 engine = create_engine(os.getenv("DATABASE_URL"))
-db = scoped_session(sessionmaker(bind=engine))
+db = flask_scoped_session(sessionmaker(bind=engine),app)
+
 
 def login_required(view):
     @wraps(view)
@@ -106,12 +108,11 @@ def search(page=1):
                     'ROW_NUMBER () OVER ( '
                                         'ORDER BY title '
                                         ') FROM books '
-                    'WHERE isbn = :item OR title ILIKE :iteml OR author ILIKE :iteml '
+                    'WHERE isbn ILIKE :item OR title ILIKE :item OR author ILIKE :item '
             ') X '
         'WHERE ROW_NUMBER BETWEEN :low AND :high ',
         {
-            'item' : item,
-            'iteml':f'%{item}%',
+            'item':f'%{item}%',
             'low':(page-1)*12+1,
             'high':page*12
         }
@@ -214,7 +215,7 @@ def book(isbn):
         }
     ).fetchall()
 
-    reviews = { i:i.username for i in reviews}
+    reviews = { i.username:i for i in reviews}
 
     return render_template('book.html', title=book.title , book=book, reviews=reviews)
 
