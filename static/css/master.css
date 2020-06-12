@@ -15,7 +15,8 @@ h3{
   font-size: 1rem;
 }
 mark{
-  background-color: rgb(173,255,47);
+  color:#343a40;
+  background-color: #a8d1ff;
 }
 
 article .card{
@@ -29,6 +30,10 @@ article .card-header a{
 
 article .card-header:hover{
   outline: #17a2b8 solid 2px;
+}
+article .card-header:hover mark{
+  color: #17a2b8;
+  background-color: #343a40;
 }
 article .card-header:hover a{
   color: #17a2b8;

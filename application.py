@@ -97,8 +97,8 @@ def search(page=1):
             'msg':'Search item missing please include search item in url'
         }
         return make_response(render_template('error.html',error=error),400)
-
-    g.addMarkup = lambda x: Markup(x.replace(item,f"<mark>{item}</mark>"))
+    oneUpper = lambda x:x[0].upper()+x[1:]
+    g.addMarkup = lambda x: Markup(x.replace(item,f"<mark>{item}</mark>").replace(oneUpper(item),f"<mark>{oneUpper(item)}</mark>"))
     books = db.execute(
         'SELECT '
             '* '
