@@ -149,6 +149,7 @@ def register():
                     'password': generate_password_hash(password)
                     }
                 )
+                flash("Account is registerd, you can login now")
                 db.commit()
                 return redirect(url_for('login'))
 
