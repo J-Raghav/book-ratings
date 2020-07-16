@@ -53,14 +53,19 @@ def error404():
         error = {
             'code':404,
             'title':'Not found',
-            'msg':'Invalid page the page you are trying to access does not exist'
+            'msg':'The page you are trying to access does not exist'
         }
         return make_response(render_template('error.html',error=error),404)
 # Route leading to home page
 @app.route("/")
-def index(page=1):
+def index():
     g.len = len
     g.addMarkup = lambda x: x
+
+    try:
+        page = int(request.args.get('page',1))
+    except:
+        page = 1
 
     books = db.execute(
         'SELECT '
@@ -78,17 +83,21 @@ def index(page=1):
         'high':page*12
         }
     ).fetchall()
-    if not books and page != 1:
-        error404()
-    return render_template('index.html', title='Home', page=page, books=books)
 
-app.add_url_rule('/page/<int:page>','index',index)
+    if not books and page != 1:
+        return error404()
+    return render_template('index.html', title='Home', page=page, books=books)
 
 @app.route("/search")
 @login_required
-def search(page=1):
+def search():
     g.len = len
     item = request.args.get('item',None).strip()
+    try:
+        page = int(request.args.get('item',1))
+    except:
+        page = 1
+
     error = None
     if item is None:
         error = {
@@ -97,8 +106,9 @@ def search(page=1):
             'msg':'Search item missing please include search item in url'
         }
         return make_response(render_template('error.html',error=error),400)
-    oneUpper = lambda x:x[0].upper()+x[1:]
-    g.addMarkup = lambda x: Markup(x.replace(item,f"<mark>{item}</mark>").replace(oneUpper(item),f"<mark>{oneUpper(item)}</mark>"))
+
+    g.addMarkup = lambda x: Markup(x.replace(item,f"<span class='highlight'>{item}</span>").replace(item.capitalize(),f"<span class='highlight'>{item.capitalize()}</span>"))
+
     books = db.execute(
         'SELECT '
             '* '
@@ -117,12 +127,13 @@ def search(page=1):
             'high':page*12
         }
     ).fetchall()
+
     if not books and page != 1:
-        error404()
+        return error404()
 
     return render_template('search.html',title='Search', page=page, item=item, books=books)
 
-app.add_url_rule('/search/page/<int:page>','search',search)
+
 
 @app.route('/register',methods=['GET','POST'])
 def register():
@@ -206,7 +217,7 @@ def book(isbn):
     ).fetchone()
 
     if book is None:
-        error404()
+        return error404()
 
     reviews = db.execute(
         'SELECT * FROM reviews '

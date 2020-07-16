@@ -15,10 +15,6 @@ h2{
 h3{
   font-size: 1rem;
 }
-mark{
-  color:#343a40;
-  background-color: #a8d1ff;
-}
 
 article .card{
   padding:1px;
@@ -46,9 +42,15 @@ nav a,.card a{
 
 nav a:hover{
   text-decoration: none;
-  color:#17a2b8;
+  color:#17a2b8!important;
 }
 
+.highlight{
+    color: #a8d1ff;
+}
+a:hover .highlight{
+    color:#17a2b8!important;
+}
 .card{
   height:90%;
   overflow: none;
